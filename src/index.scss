@@ -1,0 +1,43 @@
+@import '~bootstrap/scss/bootstrap';
+
+.date-range-wrapper {
+  margin-left: 8vw;
+}
+
+.date-range-button {
+  margin: 3vw;
+  border: 2px solid transparent;
+  background: none;
+  border-radius: 4px;
+  transition: color ease-in-out 0.15s, border ease-in-out 0.15s, background-color ease-in-out 0.15s;
+
+  &:hover {
+    color: #82ca9e;
+    background: #9fccb01c;
+    border: 2px solid #82ca9e;
+  }
+}
+
+.recharts-cartesian-axis-ticks {
+  display: none;
+}
+
+.recharts-cartesian-axis-line {
+  display: none;
+}
+
+.recharts-wrapper {
+  margin-left: 3vw;
+}
+
+.stock-bar {
+  background-color: grey;
+}
+
+.stock-name, .stock-price, .stock-percent-change {
+  margin-left: 10vw;
+}
+
+.stock-nav-wrapper {
+  border: 1px solid black;
+}
