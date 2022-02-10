@@ -3,14 +3,16 @@ import React, { useState, useEffect, useContext } from 'react'
 import { LineChart, AreaChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import dateFormat from 'dateformat'
 import AppContext from '../../context/context'
-import { SET_CURRENT_STOCK } from '../../context/action-types'
+import { SET_CURRENT_STOCK, SET_CURRENT_LIST } from '../../context/action-types'
+import { getAllLists } from '../../api/lists'
+import { createStock } from '../../api/stocks'
 
 import Graph from './Graph'
 
 // Component for data acquisition from finnhub API
 const GetData = ({ finnhubClient, nameOfStock }) => {
     const { state, dispatch } = useContext(AppContext)
-    const { currentStock } = state
+    const { currentStock, currentList, token } = state
     const { name, ticker } = currentStock
 
     const [data, setData] = useState(null)
@@ -46,7 +48,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
             finnhubClient.quote(stock.ticker, (error, incoming, response) => {
                 if (incoming) {
                     // const percentChange = incoming.dp
-                    // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
+                    console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
                     setStock({ ...stock, openPrice: incoming.pc, percentChange: incoming.dp.toFixed(2) })
                 }
               })
@@ -151,16 +153,43 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
             setShowOpen(0)
         }
     }
+
+    const addToList = async e => {
+        const apiListData = await getAllLists(token)
+        console.log(apiListData)
+        const list = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
+        if (list) {
+            console.log(list[0].id)
+            const response = await createStock(token, currentStock.name, currentStock.ticker, list[0].id)
+            if (response.status === 200) {
+                const apiListData = await getAllLists(token)
+                const newList = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
+                console.log(newList)
+                dispatch({
+                    type: SET_CURRENT_LIST,
+                    payload: newList[0]
+                })
+            }
+        }
+    }
     
     return (
         <>
             {/* <button onClick={() => getStockData(stock.name)}>Get Data</button> */}
             <h2 className='stock-name'>{name + ' (' + ticker + ')'}</h2>
             <h3 className='stock-price'>{'$' + stock.currentPrice}</h3>
-            <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '%' : stock.percentChange + '%'}</h5>
+            {/* Add stock to list button */}
+            <span className='stock-price-and-button' onClick={addToList}>
+                <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '%' : stock.percentChange + '%'}</h5>
+                <button className='stock-add-button'><img className='stock-add-to-list' src='https://icongr.am/clarity/add-text.svg?size=24' />
+                    <span className='stock-add-text'>Add to {currentList ? currentList.name : 'current list'}</span>
+                </button>
+            </span>
+            {/* Stock Graph */}
             <div className='graph-wrapper' >            
                 {stock.openPrice ? <Graph data={data} stock={stock} dataMin={dataMin} dataMax={dataMax} showOpen={showOpen} percentChange={stock.percentChange} />  : ''}
             </div>
+            {/* Date Range */}
             <section className='date-range-wrapper'>
                 <button className='date-range-button' id='0' onClick={setRange}>1D</button>
                 <button className='date-range-button' id='7' onClick={setRange}>1W</button>

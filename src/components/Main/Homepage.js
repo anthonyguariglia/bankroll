@@ -70,16 +70,13 @@ const Homepage = () => {
     <Row>
       <StockBar className='stock-bar' finnhubClient={finnhubClient} />
     </Row>
-      <Row className='search-bar-row'>
-        <div className='search-bar-spacer' />
-        <Search className='search-bar' finnhubClient={finnhubClient}/>
-      </Row>
       <Row>
         <Col className='col-1' />
         <Col className='get-data-col col-7'>
           <GetData finnhubClient={finnhubClient} />
         </Col>
         <div className='stock-nav-col'>
+          <Search className='search-bar' finnhubClient={finnhubClient}/>
           <StockNav className='stock-nav'  />
         </div>
         <Col className='col-2' />

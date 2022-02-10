@@ -1,7 +1,7 @@
 /* eslint-disable */
 import react, { useState, useEffect, useContext } from 'react'
 import AppContext from '../../context/context'
-import { SET_CURRENT_LIST } from '../../context/action-types'
+import { SET_CURRENT_LIST, SET_CURRENT_STOCK } from '../../context/action-types'
 
 const Stock = ({ currentPrice }) => {
 
@@ -27,10 +27,11 @@ const StockBar = ({finnhubClient}) => {
   // const currentListName = 'Tech'
 
   // Unsubscribe
-  // const unsubscribe = (socket, symbol) => {
-  //   socket.send(JSON.stringify({'type':'unsubscribe','symbol': 'AAPL'}))
-  //   socket.send(JSON.stringify({'type':'unsubscribe', 'symbol': 'BINANCE:BTCUSDT'}))
-  // }
+  const unsubscribe = (socket, symbol) => {
+    socket.send(JSON.stringify({'type':'unsubscribe','symbol': 'AAPL'}))
+    socket.send(JSON.stringify({'type':'unsubscribe', 'symbol': 'TSLA'}))
+    socket.send(JSON.stringify({'type':'unsubscribe', 'symbol': 'MSFT'}))
+  }
 
   useEffect(async () =>  {
 
@@ -39,27 +40,27 @@ const StockBar = ({finnhubClient}) => {
     // Connection opened -> Subscribe
     console.log(socket)
 
-    // socket.addEventListener('open', function (event) {
-    //   setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'})), 100)
-    //   setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'})), 100)
-    //   setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'})), 100)
-    // })
+    socket.addEventListener('open', function (event) {
+      setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'})), 100)
+      setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'TSLA'})), 100)
+      setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'MSFT'})), 100)
+    })
 
     // Listen for messages
-    // socket.addEventListener('message', function (event) {
-    //   setSocketData(JSON.parse(event.data).data)
-    //   // console.log('Message from server ', JSON.parse(event.data).data)
-    // })
+    socket.addEventListener('message', function (event) {
+      setSocketData(JSON.parse(event.data).data)
+      // console.log('Message from server ', JSON.parse(event.data).data)
+    })
 
     // Unsubscribe
     return () => {
-      // unsubscribe(socket, 'AAPL')
+      unsubscribe(socket, 'AAPL')
     }
   }, [])
 
   useEffect(() => {
     if (socketData) {
-      console.log('socket data: ', socketData[0].s, socketData[0].p)
+      // console.log('socket data: ', socketData[0].s, socketData[0].p)
     }
   }, [socketData])
 
@@ -81,18 +82,18 @@ const StockBar = ({finnhubClient}) => {
   useEffect(() => {
     if (currentList) {
       console.log('new list: ', currentList)
-      if (currentList[0]) {
-        console.log(currentList[0].stocks)
-        setStocks(currentList[0].stocks)
-        currentList[0].stocks.map(stock => {
+      if (currentList) {
+        console.log(currentList.stocks)
+        setStocks(currentList.stocks)
+        currentList.stocks.map(stock => {
           // console.log(stock.ticker)
           finnhubClient.quote(stock.ticker, (error, incoming, response) => {
             if (incoming) {
                 // const percentChange = incoming.dp
                 // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
                 const tick = stock.ticker
-                const close = incoming.c
-                const change = incoming.d
+                const close = incoming.c.toFixed(2)
+                const change = incoming.dp.toFixed(2)
                 stockPriceData[`${stock.ticker}`] = close
                 stockChangeData[`${stock.ticker}`] = change
             }
@@ -109,7 +110,7 @@ const StockBar = ({finnhubClient}) => {
 
   const updateStocksWithInterval = () => {
     if (currentList) {
-      currentList[0].stocks.map(stock => {
+      currentList.stocks.map(stock => {
         // console.log(stock.ticker)
         // finnhubClient.quote(stock.ticker, (error, incoming, response) => {
         //   if (incoming) {
@@ -128,14 +129,26 @@ const StockBar = ({finnhubClient}) => {
     }
   }
 
+  const handleClick = e => {
+    console.log(e.target.id)
+    if (lists) {
+      const stockToDisplay = stocks.filter(stock => stock.ticker == e.target.id)[0]
+      console.log(stockToDisplay)
+      dispatch({
+        type: SET_CURRENT_STOCK,
+        payload: stockToDisplay
+      })
+    }
+  }
+
   return (
     <>
       <section className='stock-bar-wrapper'>
         <section className='stock-bar-box'>
           {currentList ? stocks ?  
             stocks.map(stock => (
-                <span className='stock-bar-stock' key={stock.ticker}>
-                  <h3 className='stock-bar-ticker'>{stock.ticker}</h3>
+                <span className='stock-bar-stock' key={stock.ticker} >
+                  <h3 className='stock-bar-ticker'><button className='clickable' id={stock.ticker} onClick={handleClick} >{stock.ticker}</button></h3>
                   <div className='stock-bar-price-pc-box'>
                     <h6 className='stock-bar-pc'>{stockChangeData[`${stock.ticker}`] > 0 ? '+' + stockChangeData[`${stock.ticker}`] + '%' : stockChangeData[`${stock.ticker}`] + '%'}</h6>
                     <h5 className='stock-bar-price'>{'$' + stockPriceData[`${stock.ticker}`]}</h5>

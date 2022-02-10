@@ -4,10 +4,13 @@ import AppContext from '../../context/context'
 import { Container, Row, Col } from 'react-bootstrap'
 
 import { SET_CURRENT_LIST } from '../../context/action-types'
+import { getAllLists } from '../../api/lists'
 
 const StockNav = () => {
   const { state, dispatch } = useContext(AppContext)
   const { loggedIn, token, lists, currentList } = state
+
+  const [addList, setAddList] = useState(true)
 
   // const [currentList, setCurrentList] = useState({})
 
@@ -31,28 +34,29 @@ const StockNav = () => {
     }
   }, [lists])
 
-  const handleClick = e => {
+  const handleClick = async e => {
     console.log(e.target.value)
-    const listToDispatch = lists.filter(list => list.name === e.target.value)
-    console.log(listToDispatch)
-    if (listToDispatch) {
-      dispatch({
-        type: SET_CURRENT_LIST,
-        payload: listToDispatch
-      })
-    }
+    const apiListData = await getAllLists(token)
+    const newList = apiListData.data.lists.filter(list => list.name === e.target.value ? list.id : false)
+    console.log(newList)
+    dispatch({
+      type: SET_CURRENT_LIST,
+      payload: newList[0]
+    })
     
   }
 
   return (
     <>
       <Container className='stock-nav-wrapper'>
-        <span className='stock-nav-list-header-wrapper'><h2 className='stock-nav-list-header'>Lists</h2><img className='stock-nav-add' src='https://icongr.am/clarity/add.svg?size=24' /></span>
+        <span className='stock-nav-list-header-wrapper'><h2 className='stock-nav-list-header'>Lists</h2><button className='clickable-plus' ><img className='stock-nav-add' src='https://icongr.am/clarity/add.svg?size=24' /></button></span>
           {lists ? lists.map(list => (
             <>
               <h3 className='stock-list-name'>
                 <button className='clickable' onClick={handleClick} value={list.name}>{list.name}</button>
+                <button className='delete-list-wrapper'><img className='delete-list' src='https://icongr.am/fontawesome/trash-o.svg?size=18' /></button>
               </h3>
+              
             </>
             
           )

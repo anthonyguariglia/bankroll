@@ -1,5 +1,6 @@
+/* eslint-disable */
 import axios from 'axios'
-import { apiUrl } from '../apiConfig'
+import apiUrl from '../apiConfig'
 
 export const createStock = (token, name, ticker, listId, ) => {
   return axios({
