@@ -5,6 +5,8 @@ export const SET_TOKEN = 'SET_TOKEN'
 export const SET_SIGNEDIN = 'SET_SIGNEDIN'
 export const SAVE_STATE = 'SET_STATE'
 export const SET_CURRENT_STOCK = 'SET_CURRENT_STOCK'
+export const SET_LISTS = 'SET_LISTS'
+export const SET_CURRENT_LIST = 'SET_CURRENT_LIST'
 
 
 // don't include in ALL_TYPES
@@ -16,5 +18,7 @@ export const ALL_TYPES = [
   SET_TOKEN,
   SET_SIGNEDIN,
   SAVE_STATE,
-  SET_CURRENT_STOCK
+  SET_CURRENT_STOCK,
+  SET_LISTS,
+  SET_CURRENT_LIST
 ]

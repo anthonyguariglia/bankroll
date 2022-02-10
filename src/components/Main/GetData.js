@@ -33,7 +33,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     useEffect(() => {
         if (ticker) {
             // setStock({ ...stock, name: name, ticker: ticker, openPrice: 0, currentPrice: 0 })
-            console.log(currentStock, name, ticker)
+            // console.log(currentStock, name, ticker)
             setStock({ name: name, ticker: ticker })
             // getStockData(ticker)
         }
@@ -46,7 +46,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
             finnhubClient.quote(stock.ticker, (error, incoming, response) => {
                 if (incoming) {
                     // const percentChange = incoming.dp
-                    console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
+                    // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
                     setStock({ ...stock, openPrice: incoming.pc, percentChange: incoming.dp.toFixed(2) })
                 }
               })
@@ -56,7 +56,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     // Once the openPrice has been received, pull the latest stock data
     useEffect(() => {
         if (stock.openPrice) {
-            console.log('time to run!', stock.openPrice)
+            // console.log('time to run!', stock.openPrice)
             setTimeout(() => getStockData(), 100)
         }
     }, [stock.openPrice])
@@ -65,7 +65,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     useEffect(() => {
         console.log('time has been changed')
         if (stock.ticker) {
-            console.log(timeRange, frequency)
+            // console.log(timeRange, frequency)
             setTimeout(() => getStockData(), 100)
         }
 
@@ -93,10 +93,10 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
 
         if (error) {
             // console.log(error)
-            console.log(incoming)
+            // console.log(incoming)
             
         }
-        console.log(response)
+        // console.log(response)
         if (stock.openPrice) {
             // define dataset TODO: change to closedDataset
             const open = incoming.c
@@ -158,7 +158,9 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
             <h2 className='stock-name'>{name + ' (' + ticker + ')'}</h2>
             <h3 className='stock-price'>{'$' + stock.currentPrice}</h3>
             <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '%' : stock.percentChange + '%'}</h5>
-            {stock.openPrice ? <Graph data={data} stock={stock} dataMin={dataMin} dataMax={dataMax} showOpen={showOpen} percentChange={stock.percentChange} /> : ''}
+            <div className='graph-wrapper' >            
+                {stock.openPrice ? <Graph data={data} stock={stock} dataMin={dataMin} dataMax={dataMax} showOpen={showOpen} percentChange={stock.percentChange} />  : ''}
+            </div>
             <section className='date-range-wrapper'>
                 <button className='date-range-button' id='0' onClick={setRange}>1D</button>
                 <button className='date-range-button' id='7' onClick={setRange}>1W</button>

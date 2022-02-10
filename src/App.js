@@ -11,14 +11,12 @@ import SignUp from './components/auth/SignUp'
 import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
-import GetData from './components/Main/GetData'
-import Search from './components/Main/Search'
-import StockBar from './components/Main/StockBar'
-import StockNav from './components/Main/StockNav'
+
+import Homepage from './components/Main/Homepage'
 
 
 const initialState = {
-  loggedIn: true,
+  loggedIn: false,
   userId: null,
   userName: null,
   token: null,
@@ -26,14 +24,10 @@ const initialState = {
   currentStock: {
     name: 'Tesla',
     ticker: 'TSLA'
-  }
+  },
+  lists: null,
+  currentList: null
 }
-
-const finnhub = require('finnhub')
-
-const api_key = finnhub.ApiClient.instance.authentications['api_key']
-api_key.apiKey = 'c7spe0qad3i9jn7rivng' // Replace this
-const finnhubClient = new finnhub.DefaultApi()
 
 const App = () => {
 
@@ -42,28 +36,14 @@ const App = () => {
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       <Header />
-      <main className='container'>
+      <main className='container-fluid'>
         <Route path='/sign-up' component={SignUp} />
         <Route path='/sign-in' component={SignIn} />
         <Route path='/sign-out' component={SignOut} />
+        <Route path='/home' component={Homepage}/>
+        {/* <Route path='/home' component={GetData} /> */}
       </main>
       {/* {state.loggedIn ? <MainContent /> : ''} */}
-      <Container>
-        <Row>
-          <StockBar className='stock-bar' />
-        </Row>
-        <Row>
-          <Search className='search-bar' finnhubClient={finnhubClient}/>
-        </Row>
-        <Row>
-          <Col className='get-data-col'>
-            <GetData finnhubClient={finnhubClient} />
-          </Col>
-          <Col className='stock-nav-col'>
-            <StockNav className='stock-nav' />
-          </Col>
-        </Row>
-      </Container>
     </AppContext.Provider>
   )
 }

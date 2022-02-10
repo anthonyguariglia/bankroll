@@ -4,7 +4,7 @@ import axios from 'axios'
 export const signUp = (credentials) => {
   return axios({
     method: 'POST',
-    url: apiUrl + '/sign-up/',
+    url: apiUrl + '/signup/',
     data: {
       credentials: {
         email: credentials.email,
@@ -17,20 +17,18 @@ export const signUp = (credentials) => {
 
 export const signIn = (credentials) => {
   return axios({
-    url: apiUrl + '/sign-in/',
+    url: apiUrl + '/signin/',
     method: 'POST',
     data: {
-      credentials: {
-        email: credentials.email,
-        password: credentials.password
-      }
+      username: credentials.username,
+      password: credentials.password
     }
   })
 }
 
 export const signOut = (user) => {
   return axios({
-    url: apiUrl + '/sign-out/',
+    url: apiUrl + '/signout/',
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${user.token}`

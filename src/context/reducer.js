@@ -5,7 +5,9 @@ import {
   SET_TOKEN,
   SET_SIGNEDIN,
   SAVE_STATE,
-  SET_CURRENT_STOCK
+  SET_CURRENT_STOCK,
+  SET_LISTS,
+  SET_CURRENT_LIST
 } from './action-types'
 
 export default (state, action) => {
@@ -34,6 +36,14 @@ export default (state, action) => {
       return action.payload === null
         ? {...state, shouldSaveState: false}
         : {...state, shouldSaveState: action.payload}
+    case SET_LISTS:
+      return action.payload === null
+        ? {...state, lists: null}
+        : {...state, lists: action.payload}
+    case SET_CURRENT_LIST:
+      return action.payload === null
+        ? {...state, currentList: null}
+        : {...state, currentList: action.payload}
     default: 
       return state 
   }

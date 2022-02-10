@@ -19,7 +19,7 @@ const SignIn = () => {
       event.preventDefault()
 
       const signInObj = {
-          userName: username,
+          username: username,
           password: password
       }
 
@@ -29,11 +29,11 @@ const SignIn = () => {
             // console.log(res.data, 'state: ', state)
             dispatch({
                 type: SET_USER_ID,
-                payload: res.data.user._id
+                payload: res.data.id
             })
             dispatch({
                 type: SET_TOKEN,
-                payload: res.data.user.token
+                payload: res.data.accessToken
             })
             dispatch({
                 type: SET_SIGNEDIN,
@@ -41,11 +41,7 @@ const SignIn = () => {
             })
             dispatch({
                 type: SET_USERNAME,
-                payload: res.data.user.userName
-            })
-            dispatch({
-                type: SET_ROOMS_ID,
-                payload: res.data.user.rooms
+                payload: res.data.username
             })
         })
         // .then(() =>{
@@ -71,7 +67,7 @@ const SignIn = () => {
 
 
   return (
-      loggedIn ? <Redirect to='/' /> :
+      loggedIn ? <Redirect to='/home' /> :
     <div className='row signin-parent-wrapper'>
       <div className='signin-form-wrapper'>
         <h3 className="signin-header3">Login</h3>
