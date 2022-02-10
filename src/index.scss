@@ -15,6 +15,32 @@
   text-align: left;
 }
 
+.create-list {
+  border: 1px solid #b3b3b3;
+  border-radius: 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  width: 38px;
+}
+
+.create-list-form {
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.create-list-input {
+  border-radius: 0.3rem;
+  padding: 6px 0.5rem;
+  border: 1px solid #b3b3b3;
+  margin-right: 1vw;
+  box-shadow: inset 0px 0px 0 -20px, 0px 0px 11px -7px;
+  width: 90%;
+}
+
 .css-1bl8mcx-Control {
   display: flex;
   width: 100% !important;
@@ -232,10 +258,12 @@
 .stock-nav-wrapper {
   border: 1px solid #b3b3b3;
   border-radius: 0.3rem;
-  margin: 5vh 0 0 0;
+  margin: 2vh 0 0 0;
   width: 20vw;
   padding: 1rem;
   box-shadow: inset 0px 0px 0 -20px, 0px 0px 11px -7px;
+  max-height: 60vh;
+  overflow-y: scroll;
 }
 
 .stock-percent-change {

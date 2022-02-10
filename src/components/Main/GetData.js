@@ -180,7 +180,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
             <h3 className='stock-price'>{'$' + stock.currentPrice}</h3>
             {/* Add stock to list button */}
             <span className='stock-price-and-button' onClick={addToList}>
-                <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '%' : stock.percentChange + '%'}</h5>
+                <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '% today' : stock.percentChange + '% today'}</h5>
                 <button className='stock-add-button'><img className='stock-add-to-list' src='https://icongr.am/clarity/add-text.svg?size=24' />
                     <span className='stock-add-text'>Add to {currentList ? currentList.name : 'current list'}</span>
                 </button>
