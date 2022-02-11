@@ -36,7 +36,7 @@ export const signOut = (token) => {
   })
 }
 
-export const changePassword = (token, oldPassword, newPassword, confirmPassword) => {
+export const changePassword = (token, username, oldPassword, newPassword, confirmPassword) => {
   return axios({
     url: apiUrl + '/change-password/',
     method: 'PATCH',
@@ -44,6 +44,7 @@ export const changePassword = (token, oldPassword, newPassword, confirmPassword)
       'x-access-token': token
     },
     data: {
+      username: username,
       password: oldPassword,
       newPassword: newPassword,
       confirmPassword: confirmPassword
