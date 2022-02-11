@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect, useContext } from 'react'
+import { Col } from 'react-bootstrap'
 import { LineChart, AreaChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import dateFormat from 'dateformat'
 import AppContext from '../../context/context'
@@ -174,16 +175,17 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     }
     
     return (
-        <>
+        <>  
+              
             {/* <button onClick={() => getStockData(stock.name)}>Get Data</button> */}
             <h2 className='stock-name'>{name + ' (' + ticker + ')'}</h2>
             <h3 className='stock-price'>{'$' + stock.currentPrice}</h3>
             {/* Add stock to list button */}
             <span className='stock-price-and-button' onClick={addToList}>
                 <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '% today' : stock.percentChange + '% today'}</h5>
-                <button className='stock-add-button'><img className='stock-add-to-list' src='https://icongr.am/clarity/add-text.svg?size=24' />
-                    <span className='stock-add-text'>Add to {currentList ? currentList.name : 'current list'}</span>
-                </button>
+                    <button className='stock-add-button'><img className='stock-add-to-list' src='https://icongr.am/clarity/add-text.svg?size=24' />
+                <span className='stock-add-text'>Add to {currentList ? currentList.name : 'current list'}</span>
+            </button>
             </span>
             {/* Stock Graph */}
             <div className='graph-wrapper' >            

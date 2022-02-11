@@ -86,8 +86,20 @@
   height: 34px;
 }
 
+.filler-spam {
+  width: 55vw;
+}
+
+.get-data-col {
+  width: 60vw;
+}
+
 .graph-wrapper {
   width: 40vw;
+}
+
+.left-spacer {
+  width: 20vw;
 }
 
 .recharts-cartesian-axis-ticks {
@@ -125,6 +137,7 @@
   border-radius: 1rem;
   background: transparent;
   transition: border 0.15s ease-in-out;
+  float: right;
 
   &:hover {
 
@@ -194,6 +207,7 @@
 .stock-bar-wrapper {
   display: flex;
   justify-content: center;
+  margin-bottom: 2vh;
 }
 
 .stock-list-name {
@@ -222,6 +236,10 @@
   margin-left: 6vw;
 }
 
+.stock-price {
+  margin-bottom: 0;
+}
+
 .row > .stock-nav-col {
   padding: 0 !important;
 }
@@ -231,7 +249,7 @@
   flex-direction: column;
   align-items: flex-start;
   width: 20vw;
-  // padding: 2rem;
+  margin-left: 5vw;
 }
 
 .stock-nav-list-header {
@@ -272,5 +290,5 @@
 
 .stock-price-and-button {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
 }

@@ -71,8 +71,8 @@ const Homepage = () => {
       <StockBar className='stock-bar' finnhubClient={finnhubClient} />
     </Row>
       <Row>
-        <Col className='col-1' />
-        <Col className='get-data-col col-7'>
+        <Col className='left-spacer' />
+        <Col className='get-data-col'>
           <GetData finnhubClient={finnhubClient} />
         </Col>
         <div className='stock-nav-col'>
