@@ -91,7 +91,13 @@
 }
 
 .get-data-col {
-  width: 60vw;
+  width: 45vw;
+}
+
+.graph-content {
+  display: flex;
+  justify-content: center;
+  margin-left: -8vw;
 }
 
 .graph-wrapper {
@@ -183,6 +189,19 @@
   font-size: 0.8rem;
 }
 
+.stock-bar-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 2rem;
+  color: white;
+
+  p { 
+    margin-bottom: 0;
+  }
+}
+
 .stock-bar-pc {
   text-align: right;
 }
@@ -271,7 +290,7 @@
 
 .stock-nav-list-header {
   margin: 0 0 0rem 0;
-  padding: 0.5rem 0 0 1rem;
+  padding: 0rem 0 0 1rem;
   width: 85%;
 }
 
@@ -302,7 +321,7 @@
 }
 
 .stock-percent-change {
-  width: 65%;
+  width: 75%;
 }
 
 .stock-price-and-button {

@@ -6,13 +6,10 @@ import AppContext from '../../context/context'
 import { SET_CURRENT_STOCK } from '../../context/action-types'
 
 const Search = ({ finnhubClient} ) => {
-  const { state, dispatch } = useContext(AppContext)
+  const { state, dispatch, lists } = useContext(AppContext)
   const { currentStock } = state
   const [text, setText] = useState('')
-  const [stocks, setStocks] = useState([
-    { value: 'UPST' },
-    { value: 'AAPL' }
-  ])
+  const [stocks, setStocks] = useState([])
 
   const customStyles = {
     option: (provided, state) => ({
@@ -93,6 +90,7 @@ const Search = ({ finnhubClient} ) => {
           getOptionValue={(option) => option.value}
           getOptionLabel={(option) => option.value}
           styles={customStyles}
+          placeholder='Search for a stock...'
         />
       </section>
     </>

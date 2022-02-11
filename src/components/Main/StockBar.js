@@ -15,10 +15,6 @@ const StockBar = ({finnhubClient}) => {
   const [stockChangeData, setStockChangeData] = useState({})
   const [stocks, setStocks] = useState([])
 
-
-  // Replace with variable passed in from a click
-  // const currentListName = 'Tech'
-
   // Unsubscribe
   const unsubscribe = (socket, symbol) => {
     socket.send(JSON.stringify({'type':'unsubscribe','symbol': 'AAPL'}))
@@ -76,22 +72,28 @@ const StockBar = ({finnhubClient}) => {
     if (currentList) {
       console.log('new list: ', currentList)
       if (currentList) {
-        console.log(currentList.stocks)
-        setStocks(currentList.stocks)
-        currentList.stocks.map(stock => {
-          // console.log(stock.ticker)
-          finnhubClient.quote(stock.ticker, (error, incoming, response) => {
-            if (incoming) {
-                // const percentChange = incoming.dp
-                // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
-                const tick = stock.ticker
-                const close = incoming.c.toFixed(2)
-                const change = incoming.dp.toFixed(2)
-                stockPriceData[`${stock.ticker}`] = close
-                stockChangeData[`${stock.ticker}`] = change
-            }
-          })
-        })
+        if (currentList.stocks) {
+          if (currentList.stocks.length) {
+            console.log(currentList.stocks)
+            setStocks(currentList.stocks)
+            currentList.stocks.map(stock => {
+              // console.log(stock.ticker)
+              finnhubClient.quote(stock.ticker, (error, incoming, response) => {
+                if (incoming) {
+                    // const percentChange = incoming.dp
+                    // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
+                    const tick = stock.ticker
+                    const close = incoming.c.toFixed(2)
+                    const change = incoming.dp.toFixed(2)
+                    stockPriceData[`${stock.ticker}`] = close
+                    stockChangeData[`${stock.ticker}`] = change
+                }
+              })
+            })
+          } else {
+            setStocks(currentList.stocks)
+          }
+        }
       }
     }
   }, [currentList])
@@ -133,7 +135,7 @@ const StockBar = ({finnhubClient}) => {
     <>
       <section className='stock-bar-wrapper'>
         <section className='stock-bar-box'>
-          {currentList ? stocks ?  
+          {currentList ? ( stocks.length ?  
             stocks.map(stock => (
                 <span className='stock-bar-stock' key={stock.ticker} >
                   <button className='stock-bar-delete-stock' onClick={handleRemoveStock} value={stock.ticker}>X</button> 
@@ -144,7 +146,7 @@ const StockBar = ({finnhubClient}) => {
                   </div>
                 </span>
             ))
-          : 'Select a list!' : 'Add stocks to get started'}
+          : <span className='stock-bar-message'><p>Add stocks!</p></span> ) : <span className='stock-bar-message'><p>Add stocks to a list to get started!</p></span> }
         </section>
       </section>
     </>

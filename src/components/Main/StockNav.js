@@ -71,11 +71,22 @@ const StockNav = () => {
     console.log(e)
     const newList = await deleteList(token, e)
     const listData = await getAllLists(token)
-    console.log(listData)
+    console.log('list data: ', listData)
     dispatch({
       type: SET_LISTS,
       payload: listData.data.lists
     })
+    if (listData.data.lists.length > 1) {
+      dispatch({
+        type: SET_CURRENT_LIST,
+        payload: listData.data.lists[listData.data.lists.length - 1]
+      })
+    } else {
+      dispatch({
+        type: SET_CURRENT_LIST,
+        payload: null
+      })
+    }
   }
 
   return (
@@ -87,7 +98,7 @@ const StockNav = () => {
           {/* Add lists based on context variable */}
           {lists ? lists.map(list => (
             <>
-              <h3 className='stock-list-name'>
+              <h3 className='stock-list-name' key={list.name}>
                 <button className='clickable' onClick={handleClick} value={list.name}>{list.name}</button>
                 <button className='delete-list-wrapper' onClick={() => handleDelete(list.name)} ><img className='delete-list' src='https://icongr.am/fontawesome/trash-o.svg?size=18' /></button>
               </h3>
