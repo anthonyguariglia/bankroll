@@ -21,22 +21,11 @@ const finnhubClient = new finnhub.DefaultApi()
 const Homepage = () => {
   const { state, dispatch } = useContext(AppContext)
   const { loggedIn, token, lists, currentList } = state
-  // const [lists, setLists] = useState({})
 
-  const processListData = async (listResponse) => {
-    const listObj = await listResponse.map(list => {
-      return {
-        name: list.name,
-        stocks: [ ...list.stocks ]
-      }
-    })
-    return listObj
-  }
-
+  // componentDidMount
   useEffect(async () => {
     if (loggedIn) {
       const listResponse = await getAllLists(token)
-      console.log(listResponse.data.lists)
       const listData = await listResponse.data.lists.map(list => {
         return {
           name: list.name,
@@ -51,9 +40,9 @@ const Homepage = () => {
     }
   }, [])
 
+  // update current list data globally whenever it is changed locally
   useEffect(() => {
     if (lists) {
-      console.log(lists)
       if (!currentList) {
         dispatch({
           type: SET_CURRENT_LIST,

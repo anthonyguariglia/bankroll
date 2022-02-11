@@ -4,6 +4,7 @@ import Creatable, { useCreatable } from 'react-select/creatable'
 import debounce from 'lodash.debounce'
 import AppContext from '../../context/context'
 import { SET_CURRENT_STOCK } from '../../context/action-types'
+import { toast } from 'react-toastify'
 
 const Search = ({ finnhubClient} ) => {
   const { state, dispatch, lists } = useContext(AppContext)
@@ -11,12 +12,12 @@ const Search = ({ finnhubClient} ) => {
   const [text, setText] = useState('')
   const [stocks, setStocks] = useState([])
 
+  // Styling for search bar
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
-      borderBottom: '1px dotted blue',
-      color: state.isSelected ? 'red' : 'blue',
-      padding: 20,
+      color: state.isSelected ? 'white' : 'grey',
+      padding: 10,
     }),
     control: () => ({
       // none of react-select's styles are passed to <Control />
@@ -30,53 +31,53 @@ const Search = ({ finnhubClient} ) => {
     }
   }
 
+  // when a stock is searched
   const handleSubmit = (e) => {
-    e.preventDefault
-    console.log(e.value)
-
-    // TODO: Dispatch the new stock to context, adding to the stock list (which gives the options of this dropdown), and to currentStock (which will be loaded to the graph)
-
     try {
+      // make a call to the finnhub api to look for the desired stock
       finnhubClient.symbolSearch(e.value, (error, data, response) => {
-        // console.log(data.result)
+        // if we get a response
         if (data) {
+          // condense search to the top 3 results
           const searchResults = data.result.slice(0, 3)
-          // console.log(searchResults)
           const upperLim = searchResults.length < 3 ? 3 : searchResults.length
           let responseObject = []
+
+          // clean up response data, trim everything after the period
           for (let i = 0; i < upperLim; i++) {
             const description = searchResults[`${i}`].description
             let symbol = searchResults[`${i}`].symbol
 
             if (symbol.includes('.')) {
-              console.log(symbol)
               symbol = symbol.slice(0, symbol.indexOf('.'))
             }
             responseObject.push({ value: symbol, name: `${description}`})
           }
-          // console.log(responseObject)
-          // setOptions(responseObject)
-          // console.log(responseObject)
 
+          // package up response data
           const responseStock = {
             ticker: responseObject[0].value,
             name: responseObject[1].name
           }
+
+          // set the current stock to the search result
           dispatch({
             type: SET_CURRENT_STOCK,
             payload: responseStock
           })
+
+          // if this is a new stock, add it to the list
           if (stocks.filter(stock => stock.value === responseObject[0].value).length === 0) {
-            console.log('stocks: ', stocks, 'incoming: ', { value: responseObject[0].value })
             setStocks([ { value: responseObject[0].value }, ...stocks ])
           }
-          // console.log(responseStock)
+
           return responseObject
         }
         
       }) 
     } catch (err) {
       // toast error here
+      toast.error('An error occured, please try again')
     }
   }
 

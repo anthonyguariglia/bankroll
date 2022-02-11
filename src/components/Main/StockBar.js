@@ -10,7 +10,6 @@ const StockBar = ({finnhubClient}) => {
   const{ state, dispatch } = useContext(AppContext)
   const { loggedIn, token, lists, currentList } = state
 
-  // const [currentList, setCurrentList] = useState({})
   const [socketData, setSocketData] = useState(null)
   const [stockPriceData, setStockPriceData] = useState({})
   const [stockChangeData, setStockChangeData] = useState({})
@@ -30,6 +29,7 @@ const StockBar = ({finnhubClient}) => {
     // Connection opened -> Subscribe
     console.log(socket)
 
+    // add event listeners
     socket.addEventListener('open', function (event) {
       setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'})), 100)
       setTimeout(() => socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'TSLA'})), 100)
@@ -69,17 +69,22 @@ const StockBar = ({finnhubClient}) => {
 
   }, [lists])
 
+  // if the current list has changed
   useEffect(() => {
+    // check that it's not null
     if (currentList) {
-      console.log('new list: ', currentList)
+      // (twice)
       if (currentList) {
+        // check if it has a stocks array (i.e. not null)
         if (currentList.stocks) {
+          // if so, check that the array has something in it without throwing an error
           if (currentList.stocks.length) {
-            console.log(currentList.stocks)
+            // update the stocks variable with the new stock data
             setStocks(currentList.stocks)
+            // grab the latest price data for each stock in the list
             currentList.stocks.map(stock => {
-              // console.log(stock.ticker)
               finnhubClient.quote(stock.ticker, (error, incoming, response) => {
+                // if we receive data, update the stock bar with that new price data
                 if (incoming) {
                     // const percentChange = incoming.dp
                     // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
@@ -99,10 +104,10 @@ const StockBar = ({finnhubClient}) => {
     }
   }, [currentList])
 
+  // if a user clicks on a stock on the bar, set it to the current stock
   const handleClick = e => {
     if (lists) {
       const stockToDisplay = stocks.filter(stock => stock.ticker == e.target.id)[0]
-      console.log(stockToDisplay)
       dispatch({
         type: SET_CURRENT_STOCK,
         payload: stockToDisplay
@@ -110,6 +115,7 @@ const StockBar = ({finnhubClient}) => {
     }
   }
 
+  // if the user clicks the 'remove stock' button
   const handleRemoveStock = async e => {
     // get the ID of the list the stock is currently in
     const listData = await getAllLists(token)

@@ -14,6 +14,8 @@ import Graph from './Graph'
 const GetData = ({ finnhubClient, nameOfStock }) => {
   const { state, dispatch } = useContext(AppContext)
   const { currentStock, currentList, token } = state
+
+  // Set a base currentStock if none exists
   if (!currentStock) {
     dispatch({
       type: SET_CURRENT_STOCK,
@@ -23,8 +25,11 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
       }
     })
   }
+
+  // Otherwise pull currentStock from context
   const { name, ticker } = currentStock
 
+  // declare state variables
   const [data, setData] = useState(null)
   const [stock, setStock] = useState({})
   const [dataMin, setDataMin] = useState(0)
@@ -35,13 +40,17 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
   const [now, setNow] = useState(null)
   const [showOpen, setShowOpen] = useState(1)
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      <>
-        <span>{props}</span>
-      </>
-    </Tooltip>
-  )
+  // set up tool tips for 'add to list'
+  const renderTooltip = (props) => {
+    const text = currentList ? 'Add to ' + currentList.name : 'Create a list!'
+    return (
+      <Tooltip id="button-tooltip" {...props}>
+        <>
+          <span>{text}</span>
+        </>
+      </Tooltip>
+    )
+  }
 
   // componentDidMount
   useEffect(() => {
@@ -50,23 +59,18 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     setStock({ name: name, ticker: ticker, openPrice: 0, currentPrice: 0 })
   }, [])
 
+  // update the local stock whenever the global stock changes
   useEffect(() => {
   if (ticker) {
-      // setStock({ ...stock, name: name, ticker: ticker, openPrice: 0, currentPrice: 0 })
-      // console.log(currentStock, name, ticker)
       setStock({ name: name, ticker: ticker })
-      // getStockData(ticker)
     }
   }, [ticker])
 
   // When a new ticker is selected, pull a quote on that ticker and trigger the data acquisition sequence
   useEffect(() => {
-    console.log('new ticker', stock.ticker)
     if (stock.ticker) {
       finnhubClient.quote(stock.ticker, (error, incoming, response) => {
         if (incoming) {
-          // const percentChange = incoming.dp
-          console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
           setStock({ ...stock, openPrice: incoming.pc, percentChange: incoming.dp.toFixed(2) })
         }
       })
@@ -76,16 +80,13 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
   // Once the openPrice has been received, pull the latest stock data
   useEffect(() => {
     if (stock.openPrice) {
-      // console.log('time to run!', stock.openPrice)
       setTimeout(() => getStockData(), 100)
     }
   }, [stock.openPrice])
 
   // Refresh stock history data when timeRange is changed
   useEffect(() => {
-    console.log('time has been changed')
     if (stock.ticker) {
-      // console.log(timeRange, frequency)
       setTimeout(() => getStockData(), 100)
     }
 
@@ -94,43 +95,33 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
   // Update currentPrice of stock state variable when new data is obtained
   useEffect(() => {
     if (data) {
-      // console.log(data[data.length - 1].price)
       setStock({ ...stock, currentPrice: data[data.length - 1].price })
-      // console.log(dataMin, dataMax)
     }
   }, [data])
 
   // Get latest stock data
   const getStockData = (ticker) => {
-    console.log(marketOpen, marketOpen - (86400 * timeRange))
-
+    // contact finnhub api to get candle data over specified range, at calculated frequency, for the given ticker
     finnhubClient.stockCandles(stock.ticker ? stock.ticker : ticker, frequency, (marketOpen - (86400 * timeRange)), Math.floor(new Date().getTime() / 1000), (error, incoming, response) => {
       if (error) {
-          // console.log(error)
-          // console.log(incoming)
-          
+        toast.error('An unexpected error occurred. Please wait a few moments then try again')
       }
-      // console.log(response)
       if (stock.openPrice) {
         // define dataset TODO: change to closedDataset
         const open = incoming.c
         let openDataset = [incoming.t, incoming.c]
-        console.log(openDataset)
 
         // Create dataSet array that contains objects of name and price for graph
         let dataSet = []
         let i = 0
         if (openDataset[0] !== undefined) {
           openDataset[0].forEach(dataPoint => {
-            // const date = new Date(dataPoint * 1000)
-            // console.log('open price ', stock.openPrice)
             const date = dateFormat(new Date(dataPoint * 1000), 'm/d/yy, h:MM')
             const dataObj = { name: date, price: openDataset[1][i].toFixed(2), open: stock.openPrice }
             i++
             dataSet.push(dataObj)
           })
       
-
           // update state variables to pass to graph
           setDataMin(Math.min(...open))
           setDataMax(Math.max(...open))
@@ -140,14 +131,14 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     })
   }
 
+  // set the time range of the graph
   const setRange = e => {
-    console.log('here!', e.target.id)
     if (parseInt(e.target.id)) {
       setTimeRange(parseInt(e.target.id))
     } else {
       setTimeRange(e.target.id)
     }
-    console.log(now - marketOpen)
+    // based on the button clicked, calculate the data frequency and decide whether to show the 'opening' price
     if (e.target.id == 0 && ((now - marketOpen) <= 14400)) {
       setFrequency(1)
       setShowOpen(1)
@@ -166,24 +157,36 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     }
   }
 
+  // handle when a user adds a stock to a list
   const addToList = async e => {
+    // pull all list data from the server
     const apiListData = await getAllLists(token)
-    console.log(apiListData)
+    
+    // filter that data to find the specific listID we need
     const list = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
+
+    // if we find a list
     if (list) {
-      console.log(list[0].id)
+      // create a stock inside of that list
       const stockResponse = await createStock(token, currentStock.name, currentStock.ticker, list[0].id)
+
+      // handle error if the stock is already in the list
       if (stockResponse.data === 'Stock is already in list') {
-        // console.log(stockResponse)
         toast.error(stockResponse.data)
       } else {
+        // if not, pull all list data again to update nav list
         const apiListData = await getAllLists(token)
+
+        // filter that data for our specific list
         const newList = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
-        console.log(newList)
+        
+        // update context to reflect new list data
         dispatch({
           type: SET_CURRENT_LIST,
           payload: newList[0]
         })
+
+        // report result to the user
         toast.success('Stock successfully added to list')
       }
     }
@@ -191,17 +194,16 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
   
   return (
     <>
-      {/* <button onClick={() => getStockData(stock.name)}>Get Data</button> */}
       <h2 className='stock-name'>{name + ' (' + ticker + ')'}</h2>
       <h3 className='stock-price'>{'$' + stock.currentPrice}</h3>
       {/* Add stock to list button */}
       <span className='stock-price-and-button' onClick={addToList}>
         <h5 className='stock-percent-change'>{stock.percentChange > 0 ? '+' + stock.percentChange + '% today' : stock.percentChange + '% today'}</h5>
+          {/* Tooltip */}
           <OverlayTrigger
             placement="top"
             delay={{ show: 25 }}
-            overlay={renderTooltip(`${currentList ? `Add to ` + currentList.name : 'Create a list!'}`)}
-            name={currentList ? currentList.name : ''} >
+            overlay={renderTooltip()} >
             <button className='stock-add-button'><img className='stock-add-to-list' src='https://icongr.am/clarity/add-text.svg?size=24' /></button>
           </OverlayTrigger>
         {/* <span className='stock-add-text'>Add to {currentList ? currentList.name : 'current list'}</span> */}
