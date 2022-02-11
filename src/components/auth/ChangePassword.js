@@ -24,17 +24,13 @@ const ChangePassword = ({closeModal}) => {
     }
   changePassword(passwords, token)
     .then((response) =>{
-    closeModal()
-    // put toast here
-    toast.success('Successfully changed password')
-    //console.log(props,  "kaskdakddkadasndakdaksdkandakdsd");
-    
+      toast.success('Successfully changed password')
     })
     .then(() => history.push('/'))
     .catch((error) => {
       setNewPassword('')
       setOldPassword('')
-      //Failure toast here
+
       toast.error('Failed to change password')
     })
   }

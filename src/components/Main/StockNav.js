@@ -91,6 +91,7 @@ const StockNav = () => {
         payload: null
       })
     }
+    toast.success('List deleted successfully')
   }
 
   return (

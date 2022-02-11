@@ -184,6 +184,7 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
           type: SET_CURRENT_LIST,
           payload: newList[0]
         })
+        toast.success('Stock successfully added to list')
       }
     }
   }

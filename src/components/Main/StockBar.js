@@ -4,6 +4,7 @@ import AppContext from '../../context/context'
 import { SET_CURRENT_LIST, SET_CURRENT_STOCK } from '../../context/action-types'
 import { removeStock, getAllStocks } from '../../api/stocks'
 import { getAllLists } from '../../api/lists'
+import { toast } from 'react-toastify'
 
 const StockBar = ({finnhubClient}) => {
   const{ state, dispatch } = useContext(AppContext)
@@ -129,6 +130,7 @@ const StockBar = ({finnhubClient}) => {
         type: SET_CURRENT_LIST,
         payload: newList[0]
     })
+    toast.success('Successfully deleted stock from list')
   }
 
   return (
