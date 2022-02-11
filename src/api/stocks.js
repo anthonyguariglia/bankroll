@@ -27,7 +27,7 @@ export const getAllStocks = (token) => {
   })
 }
 
-export const removeStock = (token, userId, listId, stockId) => {
+export const removeStock = (token, listId, stockId) => {
   return axios({
     method: 'PATCH',
     url: apiUrl + '/user/stocks',

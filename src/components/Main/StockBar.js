@@ -2,15 +2,8 @@
 import react, { useState, useEffect, useContext } from 'react'
 import AppContext from '../../context/context'
 import { SET_CURRENT_LIST, SET_CURRENT_STOCK } from '../../context/action-types'
-
-const Stock = ({ currentPrice }) => {
-
-  return (
-    <>
-      
-    </>
-  )
-}
+import { removeStock, getAllStocks } from '../../api/stocks'
+import { getAllLists } from '../../api/lists'
 
 const StockBar = ({finnhubClient}) => {
   const{ state, dispatch } = useContext(AppContext)
@@ -99,38 +92,11 @@ const StockBar = ({finnhubClient}) => {
             }
           })
         })
-        // if (window.stockInterval) {
-        //   clearInterval(window.stockInterval)
-        // }
-        // const stockIntervalId = setInterval(updateStocksWithInterval, 30000)
-        // window.stockInterval = stockIntervalId
       }
     }
   }, [currentList])
 
-  const updateStocksWithInterval = () => {
-    if (currentList) {
-      currentList.stocks.map(stock => {
-        // console.log(stock.ticker)
-        // finnhubClient.quote(stock.ticker, (error, incoming, response) => {
-        //   if (incoming) {
-        //       // const percentChange = incoming.dp
-        //       // console.log('should be here', incoming.o, incoming.pc, incoming.dp.toFixed(2))
-        //       // console.log(stockPriceData, stockChangeData)
-        //       const tick = stock.ticker
-        //       const close = incoming.c
-        //       const change = incoming.d
-        //       stockPriceData[`${stock.ticker}`] = close
-        //       stockChangeData[`${stock.ticker}`] = change
-        //   }
-        // })
-        
-      })
-    }
-  }
-
   const handleClick = e => {
-    console.log(e.target.id)
     if (lists) {
       const stockToDisplay = stocks.filter(stock => stock.ticker == e.target.id)[0]
       console.log(stockToDisplay)
@@ -141,6 +107,28 @@ const StockBar = ({finnhubClient}) => {
     }
   }
 
+  const handleRemoveStock = async e => {
+    // get the ID of the list the stock is currently in
+    const listData = await getAllLists(token)
+    const current = await listData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
+
+    // get the ID of the stock we wish to remove
+    const stockToRemove = await currentList.stocks.filter(stock => stock.ticker === e.target.value ? stock.id : false)
+
+    if (current[0] && stockToRemove[0]) {
+
+      // remove desired stock
+      const removed = await removeStock(token, current[0].id, stockToRemove[0].id)
+    }
+    // Update stock bar
+    const apiListData = await getAllLists(token)
+    const newList = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
+    dispatch({
+        type: SET_CURRENT_LIST,
+        payload: newList[0]
+    })
+  }
+
   return (
     <>
       <section className='stock-bar-wrapper'>
@@ -148,6 +136,7 @@ const StockBar = ({finnhubClient}) => {
           {currentList ? stocks ?  
             stocks.map(stock => (
                 <span className='stock-bar-stock' key={stock.ticker} >
+                  <button className='stock-bar-delete-stock' onClick={handleRemoveStock} value={stock.ticker}>X</button> 
                   <h3 className='stock-bar-ticker'><button className='clickable' id={stock.ticker} onClick={handleClick} >{stock.ticker}</button></h3>
                   <div className='stock-bar-price-pc-box'>
                     <h6 className='stock-bar-pc'>{stockChangeData[`${stock.ticker}`] > 0 ? '+' + stockChangeData[`${stock.ticker}`] + '%' : stockChangeData[`${stock.ticker}`] + '%'}</h6>
