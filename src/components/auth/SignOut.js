@@ -4,6 +4,7 @@ import { useHistory, Redirect } from 'react-router-dom'
 import AppContext from '../../context/context'
 import { ALL_TYPES } from '../../context/action-types'
 import { signOut } from '../../api/auth'
+import { toast } from 'react-toastify'
 
 
 const SignOut = () => {
@@ -18,8 +19,10 @@ const SignOut = () => {
         return
     }
     signOut(token)
-      .finally(() => {
+      .then((res) => {
           // success toast here
+          console.log(res)
+          toast.success(res.data)
       })
       .finally(() => {
         ALL_TYPES.forEach((type) => {
@@ -33,7 +36,7 @@ const SignOut = () => {
       .finally(() => history.push('/'))
   }, [])
 
-  return !loggedIn ? <Redirect to='/' /> : null
+  return !loggedIn ? <Redirect to='/sign-in' /> : null
 }
 
 export default SignOut

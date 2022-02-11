@@ -30,7 +30,10 @@ export default (state, action) => {
         : {...state, loggedIn: action.payload}
     case SET_CURRENT_STOCK:
       return action.payload === null
-        ? {...state, currentStock: null}
+        ? {...state, currentStock: {
+          name: 'Tesla',
+          ticker: 'TSLA'
+        }}
         : {...state, currentStock: action.payload}
     case SAVE_STATE:
       return action.payload === null

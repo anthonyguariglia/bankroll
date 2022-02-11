@@ -84,6 +84,8 @@
   border: none;
   background: transparent;
   height: 34px;
+  display: flex;
+  align-items: center;
 }
 
 .filler-spam {
@@ -97,7 +99,22 @@
 .graph-content {
   display: flex;
   justify-content: center;
-  margin-left: -8vw;
+  // margin-left: -8vw;
+}
+
+.graph-content-wrapper {
+  display: flex;
+  justify-content: center;
+  border: 1px solid $success;
+  background-color: white;
+  border-radius: 0.5rem;
+  width: 80vw;
+  padding: 5vw 5vw 0 0;
+}
+
+main { 
+  background-color: #e3f7e1bd;
+  height: 100vh;
 }
 
 .graph-wrapper {
@@ -106,6 +123,38 @@
 
 .left-spacer {
   width: 14vw;
+}
+
+.navbar-auth-links {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 5vw;
+}
+
+.nav-link {
+  padding-left: 3vw;
+}
+
+.navbar-nav {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.navbar-text {
+  width: 76%;
+  padding: 0 !important;
+}
+
+.navbar-welcome-text {
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  // padding-left: 3vw;
 }
 
 .recharts-cartesian-axis-ticks {
@@ -136,6 +185,26 @@
 
 .search-bar-row {
   height: 8vh;
+}
+
+.signin-parent-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10vw;
+}
+
+.signin-form-wrapper {
+  width: 26vw;
+  padding: 3vw;
+  border: 1px solid $success;
+  background-color: white;
+  border-radius: 2rem;
+}
+
+.signin-header3 {
+  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .stock-add-button {
@@ -327,4 +396,20 @@
 .stock-price-and-button {
   display: flex;
   align-items: baseline;
+}
+
+.submit {
+  width: 100%;
+  margin-top: 0.5rem;
+  border-radius: 0.1rem;
+}
+
+.username {
+  margin-bottom: 0.5rem;
+  border-radius: 0.1rem;
+}
+
+.website-title {
+  margin-left: 5vw;
+  font-size: 2.5rem;
 }

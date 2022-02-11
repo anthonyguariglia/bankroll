@@ -6,6 +6,7 @@ import AppContext from '../../context/context'
 import { SET_CURRENT_STOCK, SET_CURRENT_LIST } from '../../context/action-types'
 import { getAllLists } from '../../api/lists'
 import { createStock } from '../../api/stocks'
+import{ toast } from 'react-toastify'
 
 import Graph from './Graph'
 
@@ -13,6 +14,15 @@ import Graph from './Graph'
 const GetData = ({ finnhubClient, nameOfStock }) => {
   const { state, dispatch } = useContext(AppContext)
   const { currentStock, currentList, token } = state
+  if (!currentStock) {
+    dispatch({
+      type: SET_CURRENT_STOCK,
+      payload: {
+        name: 'Tesla',
+        ticker: 'TSLA'
+      }
+    })
+  }
   const { name, ticker } = currentStock
 
   const [data, setData] = useState(null)
@@ -162,8 +172,11 @@ const GetData = ({ finnhubClient, nameOfStock }) => {
     const list = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
     if (list) {
       console.log(list[0].id)
-      const response = await createStock(token, currentStock.name, currentStock.ticker, list[0].id)
-      if (response.status === 200) {
+      const stockResponse = await createStock(token, currentStock.name, currentStock.ticker, list[0].id)
+      if (stockResponse.data === 'Stock is already in list') {
+        // console.log(stockResponse)
+        toast.error(stockResponse.data)
+      } else {
         const apiListData = await getAllLists(token)
         const newList = apiListData.data.lists.filter(list => list.name === currentList.name ? list.id : false)
         console.log(newList)

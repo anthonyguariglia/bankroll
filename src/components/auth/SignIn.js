@@ -25,8 +25,9 @@ const SignIn = () => {
 
       signIn(signInObj)
         .then((res) => {
-            // console.log('login response: ')
+            console.log('login response: ', res)
             // console.log(res.data, 'state: ', state)
+            toast.success(`${username} successfully signed in!`)
             dispatch({
                 type: SET_USER_ID,
                 payload: res.data.id
@@ -76,6 +77,7 @@ const SignIn = () => {
             <Form.Label className="label-username">Username</Form.Label>
             <Form.Control
               required
+              className='username'
               type='username'
               name='username'
               value={username}
@@ -87,6 +89,7 @@ const SignIn = () => {
             <Form.Label>Password</Form.Label>
             <Form.Control
               required
+              className='username'
               name='password'
               value={password}
               type='password'
@@ -94,7 +97,7 @@ const SignIn = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </Form.Group>
-          <Button variant='primary' type='submit'>Submit</Button>
+          <Button variant='success' type='submit' className='submit'>Submit</Button>
         </Form>
       </div>
     </div>

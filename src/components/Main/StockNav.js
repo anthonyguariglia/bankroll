@@ -2,6 +2,7 @@
 import react, { useState, useEffect, useContext } from 'react'
 import AppContext from '../../context/context'
 import { Container, Row, Col } from 'react-bootstrap'
+import { toast } from 'react-toastify'
 
 import { SET_CURRENT_LIST, SET_LISTS } from '../../context/action-types'
 import { getAllLists, createList, deleteList } from '../../api/lists'
@@ -49,6 +50,9 @@ const StockNav = () => {
   const handleSubmit = async e => {
     e.preventDefault()
     const newList = await createList(token, listName)
+    if (newList.data === 'List already exists') {
+      return toast.error(newList.data)
+    }
     console.log(newList)
     dispatch({
       type: SET_LISTS,

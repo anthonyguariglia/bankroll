@@ -9,7 +9,7 @@ const Graph = ({ stock, data, dataMin, dataMax, showOpen, percentChange }) => {
   const upperLimit = stock.openPrice > dataMax ? 1.01 * stock.openPrice : dataMax
 
   return (
-      <AreaChart width={730} height={400} data={data}
+      <AreaChart width={0.45 * window.innerWidth} height={0.2 * window.innerWidth} data={data}
         margin={{ top: 50, right: 30, left: 20, bottom: 5 }}>
         {/* <CartesianGrid strokeDasharray="0 0" /> */}
         <defs>

@@ -2,6 +2,7 @@
 import React, { useState, useContext } from 'react'
 import AppContext from '../../context/context'
 import { Redirect, useHistory } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { changePassword } from '../../api/auth'
 
@@ -25,48 +26,51 @@ const ChangePassword = ({closeModal}) => {
     .then((response) =>{
     closeModal()
     // put toast here
-    
+    toast.success('Successfully changed password')
     //console.log(props,  "kaskdakddkadasndakdaksdkandakdsd");
     
     })
     .then(() => history.push('/'))
     .catch((error) => {
-    setNewPassword('')
-    setOldPassword('')
-    //Failure toast here
-    
+      setNewPassword('')
+      setOldPassword('')
+      //Failure toast here
+      toast.error('Failed to change password')
     })
   }
 
   return (
     !loggedIn ? <Redirect to='/' /> :
-    <div className='row changePass-parent-wrapper '>
-      <div className='changePass-form-wrapper'>
-          <Form className="changePass-form" >
-            <Form.Group controlId='oldPassword'>
-              <Form.Label>Old password</Form.Label>
-              <Form.Control
-              required
-              name='oldPassword'
-              value={oldPassword}
-              type='password'
-              placeholder='Old Password'
-              onChange={(e) => setOldPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId='newPassword'>
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
-              required
-              name='newPassword'
-              value={newPassword}
-              type='password'
-              placeholder='New Password'
-              onChange={(e) => setNewPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Button variant='primary' type='button' onClick={onChangePassword}>Submit</Button>
-          </Form>
+    <div className='row signin-parent-wrapper '>
+      <div className='signin-form-wrapper'>
+        <h3 className="signin-header3">Change Password</h3>
+        <Form className="changePass-form" >
+          <Form.Group controlId='oldPassword'>
+            <Form.Label>Old password</Form.Label>
+            <Form.Control
+            required
+            className='username'
+            name='oldPassword'
+            value={oldPassword}
+            type='password'
+            placeholder='Old Password'
+            onChange={(e) => setOldPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId='newPassword'>
+            <Form.Label>New Password</Form.Label>
+            <Form.Control
+            required
+            className='username'
+            name='newPassword'
+            value={newPassword}
+            type='password'
+            placeholder='New Password'
+            onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Button variant='success' type='button' onClick={onChangePassword} className='submit'>Submit</Button>
+        </Form>
       </div>
     </div>
   )

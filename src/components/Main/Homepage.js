@@ -71,12 +71,14 @@ const Homepage = () => {
         <StockBar className='stock-bar' finnhubClient={finnhubClient} />
       </Row>
       <Row className='graph-content'>
-        <div className='get-data-col'>
-          <GetData finnhubClient={finnhubClient} />
-        </div>
-        <div className='stock-nav-col'>
-          <Search className='search-bar' finnhubClient={finnhubClient}/>
-          <StockNav className='stock-nav'  />
+        <div className='graph-content-wrapper'>
+          <div className='get-data-col'>
+            <GetData finnhubClient={finnhubClient} />
+          </div>
+          <div className='stock-nav-col'>
+            <Search className='search-bar' finnhubClient={finnhubClient}/>
+            <StockNav className='stock-nav'  />
+          </div>
         </div>
       </Row>
     </Container> : ''

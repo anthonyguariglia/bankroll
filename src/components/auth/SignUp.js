@@ -2,7 +2,7 @@
 import React, { useState, useContext, createRef } from 'react'
 import { Redirect, withRouter } from 'react-router-dom'
 import AppContext from '../../context/context'
-import { SET_TOKEN, SET_USER_ID } from '../../context/action-types'
+import { SET_TOKEN, SET_USER_ID, SET_USERNAME } from '../../context/action-types'
 import { useHistory } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -36,27 +36,25 @@ const SignUp = () => {
 
       const apiObj = {
           email: email,
-          userName: username,
+          username: username,
           password: password,
           passwordConfirmation: passConfirm,
       }
       signUp(apiObj)
           .then(() => signIn(apiObj))
           .then((res) => {
+							console.log(res)
               // uploadPfp(imageRef.current.files[0], res.data.user.userName)
               dispatch({
-                  type: SET_USER_ID,
-                  payload: res.data.user._id
-              })
-              dispatch({
-                  type: SET_TOKEN,
-                  payload: res.data.user.token
+                  type: SET_USERNAME,
+                  payload: res.data.username
               })
           })
           .then(() =>{
               toast(`User ${username} successfully created!`, {type: 'success'})
+							console.log('here')
           })
-          .then(() => history.push('/'))
+          .then(() => history.push('/sign-in'))
           .catch((error) => {
               setEmail('')
               setUsername('')
@@ -69,14 +67,15 @@ const SignUp = () => {
     return loggedIn ? (
 			<Redirect to='/' />
 		) : (
-			<div className='row signup-parent-wrapper'>
-				<div className='signup-form-wrapper'>
-					<h3 className='signup-header3'>Sign Up</h3>
+			<div className='row signin-parent-wrapper'>
+				<div className='signin-form-wrapper'>
+					<h3 className='signin-header3'>Sign Up</h3>
 					<Form className='signup-form' onSubmit={onSignUp}>
 						<Form.Group>
 							<Form.Label>Email address</Form.Label>
 							<Form.Control
 								required
+								className='username'
 								type='email'
 								name='email'
 								value={email}
@@ -88,6 +87,7 @@ const SignUp = () => {
 							<Form.Label>Username</Form.Label>
 							<Form.Control
 								required
+								className='username'
 								type='username'
 								name='username'
 								value={username}
@@ -99,6 +99,7 @@ const SignUp = () => {
 							<Form.Label>Password</Form.Label>
 							<Form.Control
 								required
+								className='username'
 								name='password'
 								value={password}
 								type='password'
@@ -110,6 +111,7 @@ const SignUp = () => {
 							<Form.Label>Password Confirmation</Form.Label>
 							<Form.Control
 								required
+								className='username'
 								name='passwordConfirmation'
 								value={passConfirm}
 								type='password'
@@ -129,7 +131,7 @@ const SignUp = () => {
 								ref={imageRef}
 							/>
 						</Form.Group> */}
-						<Button variant='primary' type='submit'>
+						<Button variant='success' type='submit' className='submit'>
 							Submit
 						</Button>
 					</Form>

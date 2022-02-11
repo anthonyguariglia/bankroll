@@ -5,6 +5,8 @@ import reducer from './context/reducer'
 import { Route } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import { v4 as uuid } from 'uuid'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import Header from './components/Header/Header'
 import SignUp from './components/auth/SignUp'
@@ -20,7 +22,6 @@ const initialState = {
   userId: null,
   userName: null,
   token: null,
-  userName: null,
   currentStock: {
     name: 'Tesla',
     ticker: 'TSLA'
@@ -35,15 +36,18 @@ const App = () => {
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
+      <ToastContainer 
+        position="bottom-right"
+        autoClose={1000}
+        hideProgressBar={true}/>
       <Header />
       <main className='container-fluid'>
         <Route path='/sign-up' component={SignUp} />
         <Route path='/sign-in' component={SignIn} />
         <Route path='/sign-out' component={SignOut} />
+        <Route path='/change-password' component={ChangePassword} />
         <Route path='/home' component={Homepage}/>
-        {/* <Route path='/home' component={GetData} /> */}
       </main>
-      {/* {state.loggedIn ? <MainContent /> : ''} */}
     </AppContext.Provider>
   )
 }
