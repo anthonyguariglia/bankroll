@@ -41,6 +41,10 @@ With a functional back-end, I then worked to integrate the dynamic aspects of th
 
 Alongside this, I focused on styling throughout to maintain consistency and to ensure I wouldn't need to go back and re-complete work to make it look the way I wanted. This significantly reduced the time to completion and kept things moving swiftly.
 
+## Current Homepage Design
+
+![BankRoll](https://i.imgur.com/PIOjZwQ.png)
+
 ## Future Work
 
 While the project is in a relatively steady state, there are many additional features that can be added. To name a few:
@@ -49,3 +53,11 @@ While the project is in a relatively steady state, there are many additional fea
 - A `News` section. This data can be obtained from the FinnHub API, but support is needed to build the front-end page to display the data and some planning needs to go into place to support displaying it and accessing the news articles
 - Full portfolio tracking, including tracking the value of stocks that were purchased at a certain price and the full value of a portfolio.
 - Aggregation of a list's performance. This would show the sum of the performance of all of the stocks in a list to generally show how the list is doing. Useful to track all of one's investments in a specific industry.
+
+
+
+## Links
+
+Deployed Site: https://anthonyguariglia.github.io/bankroll/
+
+Back-End Repository: https://github.com/anthonyguariglia/bankroll-server
