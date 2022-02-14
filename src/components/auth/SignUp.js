@@ -55,9 +55,9 @@ const SignUp = () => {
 							// console.log('here')
           })
           .then(() => history.push('/sign-in'))
-          .catch((error) => {
-              setEmail('')
-              setUsername('')
+          .catch((error, message) => {
+							console.log(String(error))
+							toast.error('Unable to sign up, please check credentials and try again')
               setPassword('')
               setPassConfirm('')
               // toast error here
