@@ -27,7 +27,7 @@ const StockBar = ({finnhubClient}) => {
     const socket = new WebSocket('wss://ws.finnhub.io?token=c7spe0qad3i9jn7rivng')
 
     // Connection opened -> Subscribe
-    console.log(socket)
+    // console.log(socket)
 
     // add event listeners
     socket.addEventListener('open', function (event) {

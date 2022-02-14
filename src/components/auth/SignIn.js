@@ -25,7 +25,7 @@ const SignIn = () => {
 
       signIn(signInObj)
         .then((res) => {
-            console.log('login response: ', res)
+            // console.log('login response: ', res)
             // console.log(res.data, 'state: ', state)
             toast.success(`${username} successfully signed in!`)
             dispatch({
@@ -50,7 +50,7 @@ const SignIn = () => {
         // })
         // .then(() => history.push('/'))
         .catch((error) => {
-          console.log(error)
+          // console.log(error)
           // setUsername('')
           // setPassword('')
           //error toast here

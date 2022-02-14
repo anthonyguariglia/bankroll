@@ -43,7 +43,7 @@ const SignUp = () => {
       signUp(apiObj)
           .then(() => signIn(apiObj))
           .then((res) => {
-							console.log(res)
+							// console.log(res)
               // uploadPfp(imageRef.current.files[0], res.data.user.userName)
               dispatch({
                   type: SET_USERNAME,
@@ -52,7 +52,7 @@ const SignUp = () => {
           })
           .then(() =>{
               toast(`User ${username} successfully created!`, {type: 'success'})
-							console.log('here')
+							// console.log('here')
           })
           .then(() => history.push('/sign-in'))
           .catch((error) => {

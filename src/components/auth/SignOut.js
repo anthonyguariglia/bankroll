@@ -21,7 +21,7 @@ const SignOut = () => {
     signOut(token)
       .then((res) => {
           // success toast here
-          console.log(res)
+          // console.log(res)
           toast.success(res.data)
       })
       .finally(() => {
