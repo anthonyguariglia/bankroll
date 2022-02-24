@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/bankroll/static/css/main.67ba41af.chunk.css",
-    "main.js": "/bankroll/static/js/main.f5926cd2.chunk.js",
-    "main.js.map": "/bankroll/static/js/main.f5926cd2.chunk.js.map",
+    "main.js": "/bankroll/static/js/main.fe634362.chunk.js",
+    "main.js.map": "/bankroll/static/js/main.fe634362.chunk.js.map",
     "runtime-main.js": "/bankroll/static/js/runtime-main.ad7db1c7.js",
     "runtime-main.js.map": "/bankroll/static/js/runtime-main.ad7db1c7.js.map",
     "static/css/2.66cbc4d4.chunk.css": "/bankroll/static/css/2.66cbc4d4.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.66cbc4d4.chunk.css",
     "static/js/2.124b6dca.chunk.js",
     "static/css/main.67ba41af.chunk.css",
-    "static/js/main.f5926cd2.chunk.js"
+    "static/js/main.fe634362.chunk.js"
   ]
 }
